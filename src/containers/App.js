@@ -1,48 +1,54 @@
-import React, { Component } from 'react'
+import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
 import CardList from '../components/CardList';
 import SearchBox from '../components/SearchBox';
 import Scroll from '../components/Scroll';
 import ErrorBoundary from '../components/ErrorBoundary';
+import Header from '../components/Header';
 import './App.css';
+import { requestRobots, setSearchfield } from '../actions';
 
-class App extends React.Component {
-  constructor() {
-    super()
-    this.state = {
-      robots: [],
-      searchfield: ''
-    }
-  }
-
-  componentDidMount() {
-    fetch('https://jsonplaceholder.typicode.com/users')
-      .then(response => response.json())
-      .then(users => this.setState({ robots: users }))
-  }
-
-  onSearchChange = (event) => {
-    this.setState({ searchfield: event.target.value });
-  }
-
-  render() {
-    const {robots, searchfield} = this.state
-    const filteredRobots = robots.filter((robot) => {
-      return robot.name.toLowerCase().includes(searchfield.toLowerCase())
-    })
-    return (!robots.length) ? 
-      <h1>Loading</h1> :
-      (
-        <div className="tc">
-          <h1 className='f1'>RoboFriends</h1>
-          <SearchBox searchChange={this.onSearchChange} />
-          <Scroll>
-            <ErrorBoundary>
-              <CardList robots={filteredRobots} />
-            </ErrorBoundary> 
-          </Scroll>         
-        </div>
-      );
+const mapStateToProps = state => {//tell me what piece of state i need to listen to and send it down as props
+  return {
+    searchField: state.searchRobots.searchField,//reducer
+    robots: state.requestRobots.robots,
+    isPending: state.requestRobots.isPending,
+    error: state.requestRobots.error
   }
 }
 
-export default App;
+const mapDispatchToProps = (dispatch) => {//tell me what props i  should listen to that are actions that need to get dispatched
+  return{
+    onSearchChange: (event) => dispatch(setSearchfield(event.target.value)),
+    onRequestRobots: () => dispatch(requestRobots())
+  }
+}
+
+function App({ robots, searchField, isPending, onSearchChange, onRequestRobots }) {
+
+  useEffect(()=> {
+    console.log(process.env.REACT_APP_SAY_HI);
+    onRequestRobots()
+  }, [onRequestRobots])//only run if count changes
+
+
+  const filteredRobots = robots.filter((robot) => {
+    return robot.name && robot.name.toLowerCase().includes(searchField)
+  })
+
+  return isPending ?
+    <h1>Loading</h1> :
+   (
+      <div className="tc">
+        <Header />
+        <SearchBox searchChange={onSearchChange} />
+        <Scroll>
+          <ErrorBoundary>
+            <CardList robots={filteredRobots} />
+          </ErrorBoundary>
+        </Scroll>
+      </div>
+    );
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
