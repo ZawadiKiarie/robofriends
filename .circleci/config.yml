@@ -1,9 +1,28 @@
 version: 2.1
 
 jobs:
-  build:
+  bobby:
     docker:
     # Primary container image where all steps run
      - image: cimg/base:2022.05
     steps:
         - run: echo "Say hello to YAML!"
+
+  sally:
+    docker:
+    # Primary container image where all steps run
+     - image: cimg/base:2022.05
+    steps:
+        - run: echo "Double trouble"
+
+  workflows:
+    version: 2
+    docker:
+    # Primary container image where all steps run
+     - image: cimg/base:2022.05
+    steps:
+        - run: echo "Double tripple"
+    bobby_sally:
+      jobs:
+        - bobby
+        - sally
