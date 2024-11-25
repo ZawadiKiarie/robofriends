@@ -1,21 +1,35 @@
 version: 2.1
 
 jobs:
-  bobby:
+  build:
     docker:
-     - image: cimg/base:2022.05
+     - image: cimg/node:20.15.1
     steps:
-        - run: echo "Say hello to YAML!"
+      - checkout
+      - run: echo "npm installing"
+      - run: npm install
 
-  sally:
+  test:
     docker:
-     - image: cimg/base:2022.05
+     - image: cimg/node:20.15.1
     steps:
-        - run: echo "Double trouble"
+        - checkout
+        - run: echo "testing stuff"
+        - run: npm install
+  
+  hithere:
+    docker:
+     - image: cimg/node:20.15.1
+    steps:
+      - checkout
+      - run: echo "helooo"
 
 workflows:
   version: 2
-  bobby_sally:
+  build_test_and_lint:
     jobs:
-      - bobby
-      - sally
+      - build
+      - hithere
+      - test:
+          requires:
+            - hithere
