@@ -1,17 +1,17 @@
 import React, { Component } from 'react'
 
 
-class CounterButton extends Component {
+class CounterButton2 extends Component {
   constructor() {
-    super();
+          super();
     this.state = {
       count: 0
     }
   }
 
-  shouldComponentUpdate(nextProps, nextState) {//use cautiously, but don't oversue for evry single project, it may hinder some performance or miss some updates coz of shallow comparison(for deeply nested objects)
+         shouldComponentUpdate(nextProps, nextState) {//use cautiously, but don't oversue for evry single project, it may hinder some performance or miss some updates coz of shallow comparison(for deeply nested objects)
     if(this.state.count !== nextState.count){
-      return true;
+            return true;
     }
     return false;
   }
@@ -33,4 +33,4 @@ class CounterButton extends Component {
 
 }
 
-export default CounterButton;
+export default CounterButton2;

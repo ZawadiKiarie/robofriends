@@ -5,6 +5,8 @@
   "private": true,
   "dependencies": {
     "@testing-library/user-event": "^13.5.0",
+    "husky": "^9.1.7",
+    "pretty-quick": "^4.0.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-redux": "^9.1.2",
@@ -21,7 +23,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d build",
+    "precommit": "pretty-quick --staged"
   },
   "eslintConfig": {
     "extends": [
@@ -43,6 +46,7 @@
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.5.0",
-    "@testing-library/react": "^16.0.1"
+    "@testing-library/react": "^16.0.1",
+    "prettier": "3.3.3"
   }
 }
