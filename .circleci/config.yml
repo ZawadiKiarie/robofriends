@@ -1,23 +1,36 @@
 version: 2.1
 
 jobs:
-  bobby:
+  build:
     docker:
-    # Primary container image where all steps run
-     - image: cimg/base:2022.05
+     - image: cimg/node:20.15.1
     steps:
-        - run: echo "Say hello to YAML!"
+      - checkout
+      - run: echo "npm installing"
+      - run: npm install
+      - run: CI=true npm run build
 
-  sally:
+  test:
     docker:
-    # Primary container image where all steps run
-     - image: cimg/base:2022.05
+     - image: cimg/node:20.15.1
     steps:
-        - run: echo "Double trouble"
+        - run: echo "testing stuff"
+        - run: npm install
+        - run: npm test
+  
+  hithere:
+    docker:
+     - image: cimg/node:20.15.1
+    steps:
+      - checkout
+      - run: echo "helooo"
 
 workflows:
   version: 2
-  bobby_sally:
+  build_test_and_lint:
     jobs:
-      - bobby
-      - sally
+      - build
+      - hithere
+      - test:
+          requires:
+            - hithere
