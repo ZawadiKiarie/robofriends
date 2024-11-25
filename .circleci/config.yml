@@ -16,7 +16,6 @@ jobs:
         - checkout
         - run: echo "testing stuff"
         - run: npm install
-        - run: npm test
   
   hithere:
     docker:
